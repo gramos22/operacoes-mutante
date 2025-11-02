@@ -37,7 +37,7 @@ describe('Suíte de Testes Fraca para 50 Operações Aritméticas', () => {
   test('18. deve aumentar um valor em uma porcentagem', () => { expect(aumentarPorcentagem(100, 10)).toBeCloseTo(110); });
   test('19. deve diminuir um valor em uma porcentagem', () => { expect(diminuirPorcentagem(100, 10)).toBeCloseTo(90); });
   test('20. deve inverter o sinal de um número positivo', () => { expect(inverterSinal(42)).toBe(-42); });
-  
+
   // === Testes para o Bloco 3 (21-30) ===
   test('21. deve calcular o seno de 0', () => { expect(seno(0)).toBe(0); });
   test('22. deve calcular o cosseno de 0', () => { expect(cosseno(0)).toBe(1); });
@@ -73,4 +73,86 @@ describe('Suíte de Testes Fraca para 50 Operações Aritméticas', () => {
   test('48. deve calcular o dobro de um número', () => { expect(dobro(10)).toBe(20); });
   test('49. deve calcular o triplo de um número', () => { expect(triplo(10)).toBe(30); });
   test('50. deve calcular a metade de um número', () => { expect(metade(20)).toBe(10); });
+});
+
+describe('Testes mais fortes para matar mutators restantes', () => {
+  it('deve lançar erro ao tentar dividir por zero', () => {
+    expect(() => divisao(10, 0)).toThrow('Divisão por zero não é permitida');
+  });
+  
+  it('deve rejeitar números negativos na raiz quadrada', () => {
+    expect(() => raizQuadrada(-1)).toThrow(/raiz quadrada de um número negativo/i);
+  });
+
+  it('deve calcular fatorial corretamente para casos base', () => {
+    expect(fatorial(0)).toBe(1);
+    expect(fatorial(1)).toBe(1);
+  });
+
+  it('deve rejeitar números negativos no fatorial', () => {
+    expect(() => fatorial(-5)).toThrow(/não é definido para números negativos/i);
+  });
+
+  it('deve calcular fatorial para números positivos', () => {
+    expect(fatorial(5)).toBe(120);
+  });
+
+  it('deve lidar com arrays vazios na média', () => {
+    expect(mediaArray([])).toBe(0);
+  });
+
+  it('deve calcular média para arrays com um elemento', () => {
+    expect(mediaArray([4])).toBe(4);
+    expect(mediaArray([-3])).toBe(-3);
+  });
+
+  it('deve calcular média para múltiplos elementos', () => {
+    expect(mediaArray([1, 2, 3, 4, 5])).toBe(3);
+  });
+
+  it('deve rejeitar arrays vazios no máximo e mínimo', () => {
+    expect(() => maximoArray([])).toThrow(/array vazio.*valor máximo/i);
+    expect(() => minimoArray([])).toThrow(/array vazio.*valor mínimo/i);
+  });
+
+  it('deve encontrar valores máximo e mínimo corretamente', () => {
+    const numeros = [3, 1, 4, 1, 5, 9, 2];
+    expect(maximoArray(numeros)).toBe(9);
+    expect(minimoArray(numeros)).toBe(1);
+  });
+
+  it('deve ajustar valores fora dos limites no clamp', () => {
+    expect(clamp(-5, 0, 10)).toBe(0);
+    expect(clamp(25, 0, 10)).toBe(10);
+  });
+
+  it('deve manter valores dentro do intervalo no clamp', () => {
+    expect(clamp(7, 0, 10)).toBe(7);
+    expect(clamp(0, 0, 10)).toBe(0);
+    expect(clamp(10, 0, 10)).toBe(10);
+  });
+
+  it('deve identificar números primos corretamente', () => {
+    expect(isPrimo(1)).toBe(false);
+    expect(isPrimo(0)).toBe(false);
+    expect(isPrimo(9)).toBe(false);
+    expect(isPrimo(15)).toBe(false);
+    expect(isPrimo(2)).toBe(true);
+    expect(isPrimo(7)).toBe(true);
+    expect(isPrimo(13)).toBe(true);
+  });
+
+  it('deve rejeitar arrays vazios na mediana', () => {
+    expect(() => medianaArray([])).toThrow(/array vazio.*mediana/i);
+  });
+
+  it('deve calcular mediana para arrays com tamanho ímpar', () => {
+    expect(medianaArray([3, 1, 9])).toBe(3);
+    expect(medianaArray([5, 2, 1, 4, 3])).toBe(3);
+  });
+
+  it('deve calcular mediana para arrays com tamanho par', () => {
+    expect(medianaArray([1, 5, 7, 9])).toBe(6);
+    expect(medianaArray([1, 3, 5, 7])).toBe(4);
+  });
 });
